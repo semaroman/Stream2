@@ -1,6 +1,4 @@
-class Sex {
-    public enum Sex {
-        MAN,
-        WOMAN
-    }
+public enum Sex {
+    MAN,
+    WOMAN
 }

@@ -1,7 +1,6 @@
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Nodes.collect;
+import java.util.stream.Stream;
 
 class Main {
     public static void main(String[] args) {
@@ -17,19 +16,28 @@ class Main {
                     Education.values()[new Random().nextInt(Education.values().length)])
             );
         }
-        persons.stream()
-                .filter(x -> x.getAge() < 18)
+
+        Stream<Person> underage = persons.stream();
+        underage.filter(x -> x.getAge() < 18)
                 .count();
-        List<String> Army = Arrays.stream(persons)
-                .filter(x -> x.sex == Sex.Sex.MAN)
-                .filter(y -> 27 >= y.getAge() >= 18)
-                .map(Person:getFamily())
-      .collect(Collectors.toList());
-        List<String> Work = Arrays.stream(persons)
-                .filter(x -> x.education == HIGHER)
-                .filter( for (y -> y.sex == Sex.Sex.MAN) z -> 65 >= z.getAge() >= 18 && for (a -> a.sex == Sex.Sex.WOMAN)
-            b -> 60 >= b.getAge() >= 18
-                    .sorted(Comparator.naturalOrder(Person:getFamily()))
-      .collect(Collectors.toList());
+
+        Stream<Person> soldiers = persons.stream();
+        soldiers.filter(x -> x.getAge() > 17 && x.getAge() > 27)
+                .filter(x -> x.getSex() == Sex.MAN)
+                .map(x -> x.getFamily())
+                .collect(Collectors.toList());
+
+        Stream<Person> workers = persons.stream();
+        workers.filter(x -> x.getEducation() == Education.HIGHER)
+                .filter(x -> {
+                    if (x.getSex() == Sex.MAN) {
+                        return (x.getAge() > 17 && x.getAge() < 65);
+                    } else if (x.getSex() == Sex.WOMAN) {
+                        return (x.getAge() > 17 && x.getAge() < 60);
+                    }
+                    return false;
+                })
+                .sorted(Comparator.comparing(Person::getFamily))
+                .collect(Collectors.toList());
     }
 }
